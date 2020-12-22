@@ -5,27 +5,20 @@ import Categories from '../components/Categories.jsx'
 import Carousel from '../components/Carousel.jsx'
 import CarouselItem from '../components/CarouselItem.jsx'
 import Footer from '../components/Footer.jsx';
+import useInitialState from '../hooks/useInitialState';
 import '../assets/styles/App.scss';
+
+const API = 'http://localhost:3000/initalState';
 
 
 const App = () => {
-    const [ videos, setVideos ] = useState({ mylist: [], trends: [], originals: [] });
-
-    useEffect(() => {
-        fetch('http://localhost:3000/initalState')
-            .then(response => response.json())
-            .then(data => setVideos(data))
-
-    }, []);
-
-    console.log(videos)
-
+    const initialState = useInitialState(API);
     return (
     <div className="App">
         <Header></Header>
         <Search></Search>
         {
-            videos.mylist.lenght > 0 && 
+            initialState.mylist.lenght > 0 && 
             <Categories title="My list">
                 <Carousel>
                     <CarouselItem/>
@@ -35,7 +28,7 @@ const App = () => {
         <Categories title="Most Viewed">
             <Carousel>
                 {
-                    videos.trends.map(item =>
+                    initialState.trends.map(item =>
                         <CarouselItem key={item.id} {...item}></CarouselItem>
                         )
                 }
@@ -44,7 +37,7 @@ const App = () => {
         <Categories title="Recent Added">
             <Carousel>
                 {
-                    videos.originals.map(item => 
+                    initialState.originals.map(item => 
                         <CarouselItem key={item.id} {...item}></CarouselItem>
                         )
                 }
